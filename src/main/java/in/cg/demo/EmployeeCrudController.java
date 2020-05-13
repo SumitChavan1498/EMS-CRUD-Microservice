@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,23 +16,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.cg.demo.model.Employee;
 import in.cg.demo.repository.EmployeeRepos;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RequestMapping({"/api"})
 @RestController
-public class EmployeeController {
+@Api(value = "EmployeeCrud Service using logger and swagger")
+public class EmployeeCrudController {
 
 		@Autowired
 		private EmployeeRepos repos;
 		
+		private static final Logger logger = LoggerFactory.getLogger(Employee.class);
+		
 		@GetMapping(path="/employee")
+		@ApiOperation(value = "retrieveLimitsFromConfigurations", nickname = "retrieveLimitsFromConfigurations")
+	    @ApiResponses(value = {
+	               @ApiResponse(code = 200, message = "Success", response = Employee.class),
+	               @ApiResponse(code = 500, message = "Failure", response = Employee.class)})
 		public List<Employee> retrieveAllEmployee(){
 	        System.out.println("inside retrieveAllEmployee of Controller" );
+	        logger.info("Inside retrieveAllEmployee() of controller");
 	        return  repos.findAll();
 	    }
 		
